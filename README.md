@@ -2,7 +2,7 @@
 
 데이터 파일을 열고 X축과 Y축을 고르면, **선형 회귀(직선)** 와 **비선형 회귀(곡선)** 결과를 그래프로 보여주는 웹 프로그램입니다.
 
-👉 **실행하기 : https://아이디.github.io/저장소이름/** (GitHub Pages 주소로 바꾸기)
+👉 **실행하기 : https://skylee031218.github.io/regression-analyzer/
 
 ## 기능
 
