@@ -4,7 +4,7 @@
 
 👉 **실행하기** : https://skylee031218.github.io/regression-analyzer/
 
-📝 **설명서 (Notion)** : (여기에 Notion 주소를 붙여 넣으세요)
+📝 **설명서 (Notion)** : https://app.notion.com/p/3f33fa11c4f180f28d3ece8be64374e6?source=copy_link
 
 ## 기능
 
