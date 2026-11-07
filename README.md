@@ -82,3 +82,19 @@ https://archive.ics.uci.edu/dataset/243/yacht+hydrodynamics
 ## 앞으로 추가할 기능
 
 - 대화창 (다음 과제)
+
+## LLM 대화 프로그램 (데이터처리개론 세 번째 과제)
+
+내 컴퓨터의 LM Studio에서 실행 중인 오픈소스 LLM(Qwen3 8B)과 대화하는 웹 페이지입니다.
+
+- 실행하기 : https://skylee031218.github.io/regression-analyzer/llm-chat.html
+- 코드 : [llm-chat.html](llm-chat.html) (HTML 한 파일)
+- 설명서 (Notion) : https://hickory-cuckoo-626.notion.site/LLM-4113fa11c4f180d99867c772756651e4?source=copy_link
+  
+### 사용 방법
+1. LM Studio를 실행하고 모델(Qwen3 8B)을 불러옵니다.
+2. LM Studio의 로컬 모델 API에서 서버를 켜고 CORS 허용을 켭니다. (포트 1235)
+3. 위 주소를 크롬으로 열고 "로컬 네트워크 접근"을 허용합니다.
+4. 상단에 "연결됨"이 표시되면 질문을 입력합니다.
+
+LM Studio는 내 컴퓨터에서만 실행되므로 다른 컴퓨터에서는 "연결 안 됨"으로 표시됩니다.
