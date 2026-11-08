@@ -107,7 +107,7 @@ button.stop{background:var(--err);border-color:var(--err)}
 
 <script>
 const $ = id => document.getElementById(id);
-const DEFAULT_SYS = '당신은 데이터처리개론 수업의 복습을 돕는 조교입니다. 항상 한국어로 답하세요. 모르는 것은 지어내지 말고 모른다고 하세요.';
+const DEFAULT_SYS = '당신은 데이터처리개론 수업의 복습을 돕는 조교입니다. 항상 한국어로 답하세요. 모르는 것은 지어내지 말고 모른다고 하세요. 수식은 LaTeX($, $$, \\frac 등)를 쓰지 말고 일반 글자로 쓰세요. 예: Z = (80 - 60) / 10 = 2';
 const REF_RULE = '\n\n위 [참고 자료]가 주어졌으므로, 그 안의 내용만 근거로 답하세요. 자료에 없는 내용을 물으면 "자료에 없습니다"라고 말하세요.';
 const SAMPLE_REF = '선형·비선형 회귀 대신 인공신경망을 사용하는 이유\n1. 입력이 많아지면 회귀를 사용하기 어렵습니다. 속도 하나(X)로 저항 하나(Y)를 예측할 때와 달리, 선체 모양까지 6개를 한꺼번에 사용하면 차원이 높아져서 선형·비선형 회귀의 정확도가 크게 떨어집니다.\n2. 비선형 회귀는 곡선의 모양(차수)을 사람이 미리 정해야 합니다. 2차식과 3차식 중 무엇이 적합한지 모르면 시행착오를 거쳐야 하고, 차수를 지나치게 높이면 과적합이 발생합니다. 인공신경망은 구조만 정해 주면 곡선의 모양을 데이터에서 스스로 학습합니다.';
 const PRESETS = [
@@ -131,8 +131,25 @@ PRESETS.forEach((q, i) => {
 });
 
 function esc(s){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function plainMath(s){
+  const G = {alpha:'α',beta:'β',gamma:'γ',delta:'δ',epsilon:'ε',theta:'θ',lambda:'λ',mu:'μ',pi:'π',rho:'ρ',sigma:'σ',tau:'τ',phi:'φ',omega:'ω',Sigma:'Σ',Delta:'Δ',Omega:'Ω',
+    sum:'Σ',cdot:'·',times:'×',pm:'±',leq:'≤',geq:'≥',neq:'≠',approx:'≈',infty:'∞',partial:'∂',to:'→',rightarrow:'→',sqrt:'√',ldots:'…',cdots:'…'};
+  // \frac{a}{b} -> (a)/(b)  (바깥쪽부터 반복)
+  for (let i = 0; i < 4; i++) s = s.replace(/\\[dt]?frac\s*\{([^{}]*)\}\s*\{([^{}]*)\}/g, (m, a, b) => '(' + a.trim() + ') / (' + b.trim() + ')');
+  s = s.replace(/\\sqrt\s*\{([^{}]*)\}/g, '√($1)');
+  s = s.replace(/\\hat\s*\{([^{}]*)\}/g, '$1^').replace(/\\bar\s*\{([^{}]*)\}/g, '$1̄');
+  s = s.replace(/\\(?:text|mathrm|mathbf|operatorname)\s*\{([^{}]*)\}/g, '$1');
+  s = s.replace(/\\left|\\right/g, '').replace(/\\[,;:! ]/g, ' ');
+  s = s.replace(/\\([A-Za-z]+)/g, (m, n) => G[n] || m);
+  s = s.replace(/\^\{([^{}]*)\}/g, '^($1)').replace(/_\{([^{}]*)\}/g, '_($1)');
+  return s;
+}
 function md(s){
   s = esc(s);
+  s = s.replace(/\$\$([\s\S]+?)\$\$/g, (m, c) => '\n' + plainMath(c).trim() + '\n');
+  s = s.replace(/\\\[([\s\S]+?)\\\]/g, (m, c) => '\n' + plainMath(c).trim() + '\n');
+  s = s.replace(/\\\(([\s\S]+?)\\\)/g, (m, c) => plainMath(c).trim());
+  s = s.replace(/(^|[^\w$])\$([^$\n]{1,80}?)\$(?![\w$])/g, (m, pre, c) => pre + plainMath(c).trim());
   s = s.replace(/```([\s\S]*?)```/g, (m, c) => '<pre><code>' + c.replace(/^\w*\n/, '') + '</code></pre>');
   s = s.replace(/`([^`\n]+)`/g, '<code>$1</code>');
   s = s.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
